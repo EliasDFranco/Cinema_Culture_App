@@ -1,7 +1,7 @@
 import 'package:cinema_culture/presentation/screens/movies/home_screen.dart';
 import 'package:go_router/go_router.dart';
 
-final appRoute = GoRouter(initialLocation: '/', routes: [
+final appRouter = GoRouter(initialLocation: '/', routes: [
   GoRoute(
       path: '/',
       name: HomeScreen.name,
