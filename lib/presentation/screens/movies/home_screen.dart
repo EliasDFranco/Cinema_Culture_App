@@ -29,12 +29,16 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
 
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
+    final slideShowMovies = ref.watch(moviesSlideshowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
 
     return CustomScrollView(
       slivers: [
@@ -45,20 +49,29 @@ class _HomeViewState extends ConsumerState<_HomeView> {
           ),
         ),
         SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-          return Column(
-            children: [
-              MoviesSlidesShow(movies: nowPlayingMovies),
-              MovieHorizontalListview(
-                movies: nowPlayingMovies,
-                title: 'En cines',
-                subTitle: 'No te lo pierdas!!',
-                loadNextPage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-              ),
-            ],
-          );
-        }, childCount: 1)),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                MoviesSlidesShow(movies: slideShowMovies),
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'En cines',
+                  subTitle: 'No te lo pierdas!!',
+                  loadNextPage: () => ref
+                      .read(nowPlayingMoviesProvider.notifier)
+                      .loadNextPage(),
+                ),
+                MovieHorizontalListview(
+                  movies: popularMovies,
+                  title: 'Populares',
+                  subTitle: 'Del momento...',
+                  loadNextPage: () =>
+                      ref.read(popularMoviesProvider.notifier).loadNextPage(),
+                ),
+              ],
+            );
+          }, childCount: 1),
+        ),
       ],
     );
   }
