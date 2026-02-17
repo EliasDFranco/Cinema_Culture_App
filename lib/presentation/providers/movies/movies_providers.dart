@@ -38,6 +38,17 @@ final upComingMoviesProvider =
   return notifier;
 });
 
+// Provider of Top Rated | GET
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+  final notifier = MoviesNotifier(
+    fetchMoreMovies: fetchMoreMovies,
+  );
+  notifier.loadNextPage();
+  return notifier;
+});
+
 typedef MovieCallBack = Future<List<Movie>> Function({int page});
 
 class MoviesNotifier extends StateNotifier<List<Movie>> {
